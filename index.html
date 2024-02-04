@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analogue Clock</title>
+    <style>
+      #face {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 150px;
+        z-index: -1;
+      }
+      #container {
+        padding: 0;
+        margin: 0;
+        z-index: -5;
+        position: absolute;
+        top: 50px;
+        left: 150px;
+        background-color: transparent;
+        width: 150px;
+        height: 150px;
+      }
+
+      #secondhand {
+        position: absolute;
+
+        top: 24.8px;
+        left: 75.4px;
+        width: 1.5px;
+        height: 50px;
+        transform-origin: bottom;
+        /* The above line sets the anchor point at the center of
+        the clock face so that the hand will rotate from its
+        inner end point. Need to do this for all of the hands*/
+        background-color: red;
+        z-index: 9999;
+      }
+
+      #minutehand {
+        position: absolute;
+        z-index: 3;
+        top: 30px;
+        left: 75px;
+        width: 2.2px;
+        height: 45px;
+        transform-origin: bottom;
+        /* The above line sets the anchor point at the center
+        of the clock face */
+        background-color: rgb(0, 0, 0);
+      }
+
+      #hourhand {
+        position: absolute;
+
+        top: 47px;
+        left: 74.6px;
+        width: 2.5px;
+        height: 28px;
+        transform-origin: bottom;
+        /* The above line sets the anchor point at the
+        bottom of the hand ie. at the center of the clock face */
+        background-color: rgb(0, 0, 0);
+        z-index: 2;
+      }
+      #day {
+        align-content: center;
+        text-align: center;
+        width: 9px;
+        line-height: 8px;
+        height: 8px;
+        margin: 0px;
+        padding: 0px;
+        border: solid black 0.6px;
+        font-size: 8px;
+        font-weight: 600;
+        position: absolute;
+        left: 71px;
+        top: 84px;
+      }
+
+      #month {
+        padding-left: 1px;
+        padding-right: 1px;
+        border: solid black 0.6px;
+        font-size: 6px;
+        font-weight: 600;
+        position: absolute;
+        top: 94px;
+        left: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <img src="clock.png" id="face" alt="" />
+
+      <div id="secondhand"></div>
+      <div id="minutehand"></div>
+      <div id="hourhand"></div>
+      <div id="month"></div>
+      <div id="day"></div>
+    </div>
+
+    <script>
+      //**************************************************************
+      //define a function which keeps monitoring the exact time
+      //and updates the h,m and s variables
+
+      setInterval(function () {
+        //The Date () function automatically retrieves time and date info
+        var d = new Date();
+        //extract the hours, minutes and seconds
+        var day = d.getDate();
+        var month = d.getMonth(); // month is a numeral from 0 to 11
+        var h = d.getHours();
+        var m = d.getMinutes();
+        var s = d.getSeconds();
+        //convert month number to a string value
+        switch (month) {
+          case 0:
+            monthname = "JANUARY";
+            break;
+          case 1:
+            monthname = "February";
+            break;
+          case 2:
+            monthname = "March";
+            break;
+          case 3:
+            monthname = "April";
+            break;
+          case 4:
+            monthname = "May";
+            break;
+          case 5:
+            monthname = "June";
+            break;
+          case 6:
+            monthname = "July";
+            break;
+          case 7:
+            monthname = "August";
+            break;
+          case 8:
+            monthname = "September";
+            break;
+          case 9:
+            monthname = "October";
+            break;
+          case 10:
+            monthname = "November";
+            break;
+          case 11:
+            monthname = "December";
+            break;
+        }
+        //display the month and date on the clock face
+        document.getElementById("month").innerText = monthname.toUpperCase();
+        document.getElementById("day").innerText = day;
+        //60 seconds of rotation = 360 degrees
+        //360 divided by 60 = 6. Each second is worth 6 degrees of rotation
+        //convert the seconds to degrees by multiplying by 6
+        s = s * 6;
+        //Do the same for minutes
+        m = m * 6;
+        //hours is slightly more complicated
+        //1 hour is 30 degrees of rotation for the hour hand
+        h = h * 30 + m / 12; //we also need to add a portion of m
+        //onto h so that it moves in proportion to where the
+        // minute hand is. In other words, if the minute hand is at
+        // 30 minutes then the hour hand should be halfway between
+        // the hour numerals. Since each numeral is a gap of 30 degrees
+        //we just divide the degrees of the minute hand by 12 and
+        //add that on to the hour hand.
+        secondhand.style.transform = `rotate(${s}deg)`;
+        minutehand.style.transform = `rotate(${m}deg)`;
+        hourhand.style.transform = `rotate(${h}deg)`;
+      }, 100); //update every 1/10th second.
+      //The above function will keep running in perpetuity
+      //*******END OF FUNCTION*******************************
+      //**********************************************************
+    </script>
+  </body>
+</html>
